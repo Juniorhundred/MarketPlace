@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoEntryPointMapperResponse {
-    private ProdutoEntryPointMapperResponse(){}
 
     public static ProdutoModelResponse converterDomainParaEntryPoint(Produto produto){
 

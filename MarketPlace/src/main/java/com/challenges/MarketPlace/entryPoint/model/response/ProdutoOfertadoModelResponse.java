@@ -10,16 +10,13 @@ import lombok.Getter;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ProdutoModelResponse {
+public class ProdutoOfertadoModelResponse {
 
     private String id;
     private String nome;
-    private String descricao;
     private String marca;
     private Double preco;
-    private Boolean ativo;
     private Boolean ofertado;
     private Integer porcentagemOferta;
-    private String dataCadastro;
-    private String dataAtualizacao;
+
 }

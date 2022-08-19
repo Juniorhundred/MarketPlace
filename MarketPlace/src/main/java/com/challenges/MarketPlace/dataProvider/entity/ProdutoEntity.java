@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "Products")
+@Table(name = "Produtos")
 public class ProdutoEntity {
 
     @EqualsAndHashCode.Include

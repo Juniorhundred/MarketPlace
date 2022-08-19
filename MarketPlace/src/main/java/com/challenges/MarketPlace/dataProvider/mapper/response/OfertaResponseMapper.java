@@ -6,31 +6,25 @@ import com.challenges.MarketPlace.useCase.domain.Produto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProdutoResponseMapper {
+public class OfertaResponseMapper {
 
-    public static Produto converterEntityParaDomain (ProdutoEntity produtoEntity) {
+    public static Produto converter(ProdutoEntity produtoEntity) {
         return Produto.builder()
                 .id(produtoEntity.getId())
                 .nome(produtoEntity.getNome())
-                .descricao(produtoEntity.getDescricao())
                 .marca(produtoEntity.getMarca())
                 .preco(produtoEntity.getPreco())
-                .dataCadastro(produtoEntity.getDataCadastro())
-                .dataAtualizacao(produtoEntity.getDataAtualizacao())
-                .ativo(produtoEntity.getAtivo())
                 .ofertado(produtoEntity.getOfertado())
                 .porcentagemOferta(produtoEntity.getPorcentagemOferta())
                 .build();
-
     }
 
-    public static List<Produto> converterEntitiesParaDomain(List<ProdutoEntity> produtosEntity) {
-        List<Produto> produtos = new ArrayList<>();
+    public static List<Produto> convert(List<ProdutoEntity> produtos) {
+        List<Produto> produtosModelResponse = new ArrayList<>();
 
-        produtosEntity.forEach(produto -> {
-            produtos.add(converterEntityParaDomain((produto)));
+        produtos.forEach(produto -> {
+            produtosModelResponse.add(converter((produto)));
         });
-        return produtos;
+        return produtosModelResponse;
     }
-
 }

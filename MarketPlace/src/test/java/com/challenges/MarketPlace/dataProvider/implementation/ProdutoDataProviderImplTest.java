@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
-class ProdutoDataProviderTest {
+class ProdutoDataProviderImplTest {
 
     @InjectMocks
-    private ProdutoDataProvider produtoDataProvider;
+    private ProdutoDataProviderImpl produtoDataProviderImpl;
 
     @Mock
     private ProdutoRepository produtoRepository;
@@ -32,7 +32,7 @@ class ProdutoDataProviderTest {
 
         given(produtoRepository.save(Mockito.any())).willReturn(produtoResponse);
 
-        Produto produto = produtoDataProvider.criarProduto(produtoRequest);
+        Produto produto = produtoDataProviderImpl.criarProduto(produtoRequest);
 
         assertNotNull(produto);
         assertAll(
@@ -47,6 +47,57 @@ class ProdutoDataProviderTest {
                 () -> assertEquals(0, produto.getPorcentagemOferta())
         );
     }
+
+    @Test
+    void findByNameTestSucesso() {
+        Produto produtoRequest = mockProduto();
+        ProdutoEntity produtoResponse = mockProdutoEntity();
+
+        given(produtoRepository.findByNome(produtoRequest.getNome()))
+                .willReturn(Optional.of(produtoResponse));
+
+        Optional<Produto> produto = produtoDataProviderImpl.findByNomeProduto(produtoRequest.getNome());
+
+        assertTrue(produto.isPresent());
+        assertAll(
+                () -> assertEquals("3322c422-a336-4064-96b3-2fc39ea4a108", produto.get().getId()),
+                () -> assertEquals("Refrigerante", produto.get().getNome()),
+                () -> assertEquals("Sabor: UVA", produto.get().getDescricao()),
+                () -> assertEquals("Coca-Cola", produto.get().getMarca()),
+                () -> assertEquals(10.0, produto.get().getPreco()),
+                () -> assertEquals("05/07/2022 16:55:10", produto.get().getDataCadastro()),
+                () -> assertTrue(produto.get().getAtivo()),
+                () -> assertFalse(produto.get().getOfertado()),
+                () -> assertEquals(0, produto.get().getPorcentagemOferta())
+        );
+    }
+    @Test
+    void listaProdutosTestSucesso(){
+
+    }
+
+    @Test
+    void detalharProdutoPorIdTestSucesso(){
+
+
+    }
+
+    @Test
+    void deletarProdutoPorIdTestSucesso (){
+
+
+    }
+
+    @Test
+    void atualizarProdutoTestSucesso(){
+
+    }
+
+
+
+
+
+
 
     private ProdutoEntity mockProdutoEntity() {
         return ProdutoEntity.builder()
@@ -76,27 +127,4 @@ class ProdutoDataProviderTest {
                 .build();
     }
 
-    @Test
-    void findByNameTestSucesso() {
-        Produto produtoRequest = mockProduto();
-        ProdutoEntity produtoResponse = mockProdutoEntity();
-
-        given(produtoRepository.findByNome(produtoRequest.getNome()))
-                .willReturn(Optional.of(produtoResponse));
-
-        Optional<Produto> produto = produtoDataProvider.findByNomeProduto(produtoRequest.getNome());
-
-        assertTrue(produto.isPresent());
-        assertAll(
-                () -> assertEquals("3322c422-a336-4064-96b3-2fc39ea4a108", produto.get().getId()),
-                () -> assertEquals("Refrigerante", produto.get().getNome()),
-                () -> assertEquals("Sabor: UVA", produto.get().getDescricao()),
-                () -> assertEquals("Coca-Cola", produto.get().getMarca()),
-                () -> assertEquals(10.0, produto.get().getPreco()),
-                () -> assertEquals("05/07/2022 16:55:10", produto.get().getDataCadastro()),
-                () -> assertTrue(produto.get().getAtivo()),
-                () -> assertFalse(produto.get().getOfertado()),
-                () -> assertEquals(0, produto.get().getPorcentagemOferta())
-        );
-    }
 }

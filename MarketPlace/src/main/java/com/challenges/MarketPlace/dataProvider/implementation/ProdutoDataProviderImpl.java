@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class ProdutoDataProvider implements ProdutoGateway {
+public class ProdutoDataProviderImpl implements ProdutoGateway {
 
     private final ProdutoRepository produtoRepository;
 
-    public ProdutoDataProvider(ProdutoRepository produtoRepository) {
+    public ProdutoDataProviderImpl(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
