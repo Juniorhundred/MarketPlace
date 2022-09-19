@@ -19,7 +19,7 @@ class DepartamentoEntrypointMapperResponseTest {
 
             assertNotNull(departamentoModelResponse);
             assertAll(
-                    () -> assertEquals(1L,departamentoModelResponse.getIdDepartamento()),
+                    () -> assertEquals(1,departamentoModelResponse.getIdDepartamento()),
                     () -> assertEquals("Informática",departamentoModelResponse.getNomeDepartamento()),
                     () -> assertEquals("Itens em geral de informática.", departamentoModelResponse.getDescricaoDepartamento())
             );
@@ -34,7 +34,7 @@ class DepartamentoEntrypointMapperResponseTest {
 
             assertNotNull(departamentosModelResponse);
             assertAll(
-                    () -> assertEquals(1L,departamentosModelResponse.get(0).getIdDepartamento()),
+                    () -> assertEquals(1,departamentosModelResponse.get(0).getIdDepartamento()),
                     () -> assertEquals("Informática",departamentosModelResponse.get(0).getNomeDepartamento()),
                     () -> assertEquals("Itens em geral de informática.", departamentosModelResponse.get(0).getDescricaoDepartamento())
             );
@@ -42,7 +42,7 @@ class DepartamentoEntrypointMapperResponseTest {
 
     private Departamento mockDepartamentoResponse() {
         return Departamento.builder()
-                .idDepartamento(1L)
+                .idDepartamento(1)
                 .nomeDepartamento("Informática")
                 .descricaoDepartamento("Itens em geral de informática.")
                 .build();

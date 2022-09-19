@@ -22,6 +22,7 @@ public class ProdutoEntryPointMapperResponse {
                 .dataAtualizacao(produto.getDataAtualizacao())
                 .ofertado(produto.getOfertado())
                 .porcentagemOferta(produto.getPorcentagemOferta())
+                .departamentos(DepartamentoEntrypointMapperResponse.convertList(produto.getDepartamentos()))
                 .build();
     }
 

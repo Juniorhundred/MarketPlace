@@ -3,9 +3,6 @@ package com.challenges.MarketPlace.dataProvider.mapper.request;
 import com.challenges.MarketPlace.dataProvider.entity.ProdutoEntity;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ProdutoRequestMapper {
 
     public static ProdutoEntity converterDomainParaEntity (Produto produto) {
@@ -21,17 +18,8 @@ public class ProdutoRequestMapper {
                 .ativo(produto.getAtivo())
                 .ofertado(produto.getOfertado())
                 .porcentagemOferta(produto.getPorcentagemOferta())
+                .departamentos(DepartamentoRequestMapper.convertList(produto.getDepartamentos()))
                 .build();
-    }
-
-
-    public static List<ProdutoEntity> converterOfertas(List<Produto> produtos){
-        List<ProdutoEntity> produtosModelResponse = new ArrayList<>();
-
-        produtos.forEach(produto -> {
-            produtosModelResponse.add(converterDomainParaEntity((produto)));
-        });
-        return produtosModelResponse;
     }
 
 

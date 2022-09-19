@@ -10,7 +10,7 @@ public interface DepartamentoUseCase {
 
     List<Departamento> buscarTodosDepartamentos(String nomeDepartamento);
 
-    void excluirDepartamento(Long idDepartamento);
+    void excluirDepartamento(Integer idDepartamento);
 
-    Departamento buscarDepartamentoPorId(Long idDepartamento);
+    Departamento buscarDepartamentoPorId(Integer idDepartamento);
 }

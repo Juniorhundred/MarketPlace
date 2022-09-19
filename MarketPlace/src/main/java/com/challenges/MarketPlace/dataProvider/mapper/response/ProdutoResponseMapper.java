@@ -20,6 +20,7 @@ public class ProdutoResponseMapper {
                 .ativo(produtoEntity.getAtivo())
                 .ofertado(produtoEntity.getOfertado())
                 .porcentagemOferta(produtoEntity.getPorcentagemOferta())
+                .departamentos(DepartamentoResponseMapper.convertList(produtoEntity.getDepartamentos()))
                 .build();
 
     }

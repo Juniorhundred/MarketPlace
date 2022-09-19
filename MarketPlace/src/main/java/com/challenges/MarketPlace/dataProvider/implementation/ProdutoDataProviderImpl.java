@@ -23,7 +23,6 @@ public class ProdutoDataProviderImpl implements ProdutoGateway {
         this.produtoRepository = produtoRepository;
     }
 
-
     @Override
     public Produto criarProduto(Produto produtoCriado) {
         try {

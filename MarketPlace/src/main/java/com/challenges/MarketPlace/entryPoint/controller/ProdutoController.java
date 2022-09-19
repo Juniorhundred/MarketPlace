@@ -57,7 +57,7 @@ public class ProdutoController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deletarProdutoPorId(@PathVariable String id) {
         produtoUseCase.deletarProduto(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{id}")

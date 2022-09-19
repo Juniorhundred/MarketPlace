@@ -25,4 +25,23 @@ public class DepartamentoEntrypointMapperResponse {
         });
         return departamentoModelResponse;
     }
+
+    public static DepartamentoModelResponse convert (Departamento departamento) {
+
+        return DepartamentoModelResponse.builder()
+                .idDepartamento(departamento.getIdDepartamento())
+                .nomeDepartamento(departamento.getNomeDepartamento())
+                .build();
+    }
+
+    public static List<DepartamentoModelResponse> convertList(List<Departamento> departamentos) {
+        List<DepartamentoModelResponse> departamentoModelResponse = new ArrayList<>();
+
+        departamentos.forEach(departamento -> {
+            departamentoModelResponse.add(convert((departamento)));
+        });
+        return departamentoModelResponse;
+    }
 }
+
+

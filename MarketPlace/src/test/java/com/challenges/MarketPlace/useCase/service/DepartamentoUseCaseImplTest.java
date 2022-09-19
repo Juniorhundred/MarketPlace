@@ -40,7 +40,7 @@ class DepartamentoUseCaseImplTest {
 
         assertNotNull(departamento);
         assertAll(
-                () -> assertEquals(1L, departamento.getIdDepartamento()),
+                () -> assertEquals(1, departamento.getIdDepartamento()),
                 () -> assertEquals("Informática", departamento.getNomeDepartamento()),
                 () -> assertEquals("Departamento possui -> Computadores DeskTop, Micro-Computadores, Itens em geral de informática.", departamento.getDescricaoDepartamento())
         );
@@ -69,11 +69,11 @@ class DepartamentoUseCaseImplTest {
         assertAll(
 
                 () -> assertTrue(departamentos.size() == 2),
-                () -> assertEquals(1L, departamentos.get(0).getIdDepartamento()),
+                () -> assertEquals(1, departamentos.get(0).getIdDepartamento()),
                 () -> assertEquals("Eletrônicos", departamentos.get(0).getNomeDepartamento()),
                 () -> assertEquals("Aparelhos em geral", departamentos.get(0).getDescricaoDepartamento()),
 
-                () -> assertEquals(1L, departamentos.get(1).getIdDepartamento()),
+                () -> assertEquals(1, departamentos.get(1).getIdDepartamento()),
                 () -> assertEquals("Residencial", departamentos.get(1).getNomeDepartamento()),
                 () -> assertEquals("Artigos para sua casa", departamentos.get(1).getDescricaoDepartamento())
         );
@@ -83,15 +83,15 @@ class DepartamentoUseCaseImplTest {
     void buscarDepartamentoPorId() {
         var departamentoCriado = mockDepartamentoResponse();
 
-        given(departamentoGateway.buscarDepartamentoPorId(1L))
+        given(departamentoGateway.buscarDepartamentoPorId(1))
                 .willReturn(Optional.of(departamentoCriado));
 
         Departamento departamento = departamentoUseCase
-                .buscarDepartamentoPorId(1L);
+                .buscarDepartamentoPorId(1);
 
         assertNotNull(departamento);
         assertAll(
-                () -> assertEquals(1L, departamento.getIdDepartamento()),
+                () -> assertEquals(1, departamento.getIdDepartamento()),
                 () -> assertEquals("Informática", departamento.getNomeDepartamento()),
                 () -> assertEquals("Departamento possui -> Computadores DeskTop, Micro-Computadores, Itens em geral de informática.", departamento.getDescricaoDepartamento())
         );
@@ -119,7 +119,7 @@ class DepartamentoUseCaseImplTest {
 
     private Departamento mockDepartamentoResponse() {
         return Departamento.builder()
-                .idDepartamento(1L)
+                .idDepartamento(1)
                 .nomeDepartamento("Informática")
                 .descricaoDepartamento("Departamento possui -> Computadores DeskTop, Micro-Computadores, Itens em geral de informática.")
                 .build();
@@ -130,13 +130,13 @@ class DepartamentoUseCaseImplTest {
         return List.of(
                 Departamento
                     .builder()
-                        .idDepartamento(1L)
+                        .idDepartamento(1)
                         .nomeDepartamento("Eletrônicos")
                         .descricaoDepartamento("Aparelhos em geral")
                 .build(),
                 Departamento
                     .builder()
-                        .idDepartamento(1L)
+                        .idDepartamento(1)
                         .nomeDepartamento("Residencial")
                         .descricaoDepartamento("Artigos para sua casa")
                         .build()

@@ -7,6 +7,7 @@ import com.challenges.MarketPlace.dataProvider.repository.ProdutoRepository;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 import com.challenges.MarketPlace.useCase.gateway.OfertaGateway;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class OfertaDataProviderImpl implements OfertaGateway {
         this.produtoRepository = produtoRepository;
     }
 
+    @Transactional
     @Override
     public void atualizarOferta(Produto produto) {
         ProdutoEntity produtoOfertado = ProdutoRequestMapper.converterDomainParaEntity(produto);
@@ -31,6 +33,7 @@ public class OfertaDataProviderImpl implements OfertaGateway {
         return ProdutoResponseMapper.converterEntitiesParaDomain(produtos);
     }
 
+    @Transactional
     @Override
     public void deletarOferta(Produto produto) {
             ProdutoEntity produtoAtual = ProdutoRequestMapper.converterDomainParaEntity(produto);

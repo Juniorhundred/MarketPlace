@@ -39,7 +39,7 @@ class DepartamentoDataProviderImplTest {
 
         assertNotNull(departamentoDomain);
         assertAll(
-                () -> assertEquals(1L, departamentoDomain.getIdDepartamento()),
+                () -> assertEquals(1, departamentoDomain.getIdDepartamento()),
                 () -> assertEquals("Eletrodomésticos", departamentoDomain.getNomeDepartamento()),
                 () -> assertEquals("Geladeira, Tv, HomeTeather", departamentoDomain.getDescricaoDepartamento())
         );
@@ -57,7 +57,7 @@ class DepartamentoDataProviderImplTest {
 
         assertTrue(departamento.isPresent());
         assertAll(
-                () -> assertEquals(1L, departamento.get().getIdDepartamento()),
+                () -> assertEquals(1, departamento.get().getIdDepartamento()),
                 () -> assertEquals("Eletrodomésticos", departamento.get().getNomeDepartamento()),
                 () -> assertEquals("Geladeira, Tv, HomeTeather", departamento.get().getDescricaoDepartamento())
         );
@@ -80,7 +80,7 @@ class DepartamentoDataProviderImplTest {
 
         assertTrue(departamento.isPresent());
         assertAll(
-                () -> assertEquals(1L, departamento.get().getIdDepartamento())
+                () -> assertEquals(1, departamento.get().getIdDepartamento())
         );
     }
 
@@ -96,7 +96,7 @@ class DepartamentoDataProviderImplTest {
 
     private DepartamentoEntity mockDepartamentoEntity() {
         return DepartamentoEntity.builder()
-                .idDepartamento(1L)
+                .idDepartamento(1)
                 .nomeDepartamento("Eletrodomésticos")
                 .descricaoDepartamento("Geladeira, Tv, HomeTeather")
                 .build();
@@ -104,7 +104,7 @@ class DepartamentoDataProviderImplTest {
 
     private Departamento mockDepartamentoRequest() {
         return Departamento.builder()
-                .idDepartamento(1L)
+                .idDepartamento(1)
                 .nomeDepartamento("Eletrodomésticos")
                 .descricaoDepartamento("Geladeira, Tv, HomeTeather")
                 .build();

@@ -51,7 +51,7 @@ public class DepartamentoController {
     }
 
     @DeleteMapping(value = "/{idDepartamento}")
-    public ResponseEntity<?> removerDepartamentoPorId(@PathVariable Long idDepartamento) {
+    public ResponseEntity<?> removerDepartamentoPorId(@PathVariable Integer idDepartamento) {
         departamentoUseCase.excluirDepartamento(idDepartamento);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -45,13 +45,13 @@ public class DepartamentoDataProviderImpl implements DepartamentoGateway {
         return DepartamentoResponseMapper.converterEntitiesParaDomain(departamentos);
     }
     @Override
-    public Optional<Departamento> buscarDepartamentoPorId(Long idDepartamento) {
+    public Optional<Departamento> buscarDepartamentoPorId(Integer idDepartamento) {
         return departamentoRepository.findById(idDepartamento)
                 .map(DepartamentoResponseMapper::converterEntityParaDomain);
     }
 
     @Override
-    public void excluirDepartamentoPorId(Long idDepartamento) {
+    public void excluirDepartamentoPorId(Integer idDepartamento) {
 
         departamentoRepository.deleteById(idDepartamento);
     }

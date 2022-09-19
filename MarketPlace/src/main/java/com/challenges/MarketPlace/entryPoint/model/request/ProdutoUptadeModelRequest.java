@@ -1,29 +1,23 @@
 package com.challenges.MarketPlace.entryPoint.model.request;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProdutoUptadeModelRequest {
 
     private String nome;
     private String descricao;
     private String marca;
     private Double preco;
-    private Boolean ativo;
-    private Boolean ofertado;
-    private Integer porcentagemOferta;
+    private List<Integer> codigosDepartamento;
 
-    public ProdutoUptadeModelRequest(String nome, String descricao, String marca, Double preco, Boolean ativo, Boolean ofertado, Integer porcentagemOferta) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.marca = marca;
-        this.preco = preco;
-        this.ativo = ativo;
-        this.ofertado = ofertado;
-        this.porcentagemOferta = porcentagemOferta;
-    }
 }

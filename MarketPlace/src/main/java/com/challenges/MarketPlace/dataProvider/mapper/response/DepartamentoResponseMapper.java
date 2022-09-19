@@ -25,4 +25,21 @@ public class DepartamentoResponseMapper {
         });
         return departamentosModelResponse;
     }
+
+    public static Departamento convert (DepartamentoEntity departamentoEntity) {
+
+        return Departamento.builder()
+                .idDepartamento(departamentoEntity.getIdDepartamento())
+                .nomeDepartamento(departamentoEntity.getNomeDepartamento())
+                .build();
+    }
+
+    public static List<Departamento> convertList(List<DepartamentoEntity> departamentos){
+        List<Departamento> departamentosModelResponse = new ArrayList<>();
+
+        departamentos.forEach(departamento -> {
+            departamentosModelResponse.add(convert((departamento)));
+        });
+        return departamentosModelResponse;
+    }
 }

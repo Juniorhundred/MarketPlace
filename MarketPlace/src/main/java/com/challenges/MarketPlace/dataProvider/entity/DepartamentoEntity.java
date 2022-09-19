@@ -18,7 +18,7 @@ public class DepartamentoEntity {
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long idDepartamento;
+    private Integer idDepartamento;
 
     @Column(nullable = false)
     private String nomeDepartamento;

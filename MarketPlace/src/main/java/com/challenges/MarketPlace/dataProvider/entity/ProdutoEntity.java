@@ -1,11 +1,11 @@
 package com.challenges.MarketPlace.dataProvider.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,4 +47,10 @@ public class ProdutoEntity {
 
     private String dataAtualizacao;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "produto_departamento",
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "departamento_id"))
+    private List<DepartamentoEntity> departamentos = new ArrayList<>();
 }

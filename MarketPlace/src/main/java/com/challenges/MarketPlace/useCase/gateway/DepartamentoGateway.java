@@ -13,9 +13,9 @@ public interface DepartamentoGateway {
 
     List<Departamento> buscarTodosDepartamentos(String nomeDepartamento);
 
-    Optional<Departamento> buscarDepartamentoPorId(Long idDepartamento);
+    Optional<Departamento> buscarDepartamentoPorId(Integer idDepartamento);
 
-    void excluirDepartamentoPorId(Long idDepartamento);
+    void excluirDepartamentoPorId(Integer idDepartamento);
 
 
 }
