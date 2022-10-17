@@ -1,7 +1,9 @@
 package com.challenges.MarketPlace.useCase.service;
 
+import com.challenges.MarketPlace.useCase.domain.Departamento;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 import com.challenges.MarketPlace.useCase.exceptions.*;
+import com.challenges.MarketPlace.useCase.gateway.DepartamentoGateway;
 import com.challenges.MarketPlace.useCase.gateway.ProdutoGateway;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
 
     private final ProdutoGateway produtoGateway;
 
-    public ProdutoUseCaseImpl(ProdutoGateway produtoGateway) {
-        this.produtoGateway = produtoGateway;
-    }
+    private final DepartamentoGateway departamentoGateway;
 
+    public ProdutoUseCaseImpl(ProdutoGateway produtoGateway, DepartamentoGateway departamentoGateway) {
+        this.produtoGateway = produtoGateway;
+        this.departamentoGateway = departamentoGateway;
+    }
 
     public Produto criarProduto(Produto produto) {
         validarProduto(produto);
@@ -33,8 +37,7 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
     private void validarProduto(Produto produto) {
         validarNomeDuplicado(produto);
         validarPrecoZeradoOuNegativo(produto);
-
-
+        validarDepartamento(produto);
     }
 
     private String getDataHora() {
@@ -42,9 +45,7 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
                 new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
-
         //calendar  zonedTime localDateTime alterDateJavaNewVersion
-
     }
 
     private String idGeneration() {
@@ -53,10 +54,9 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
         return uuidAsString;
     }
 
-
     private void validarPrecoZeradoOuNegativo(Produto produto) {
         if (produto.getPreco() <= 0) {
-            throw new ValidarPrecoException(String.format("O preço '%s' não pode ser zero ou negativo ", produto.getPreco()));
+            throw new ValidarPrecoException(String.format("O preço do produto não pode ser zero ou negativo "));
         }
     }
 
@@ -64,43 +64,43 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
         produtoGateway.findByNomeProduto(produto.getNome()).ifPresent(exception -> {
             throw new ValidarNomeDuplicadoException
                     (String.format(" Nome '%s'  está duplicado no sistema, verificar ", produto.getNome()));
-
         });
-
     }
 
     @Override
     public List<Produto> buscarListaDeProdutos() {
+        List<Produto> produtos = produtoGateway.listaProdutos();
 
-        return produtoGateway.listaProdutos();
+        if (produtos.isEmpty()) {
+            throw new ConteudoNaoEncontradoException("Não existe produtos cadastrados");
+        }
+
+        return produtos;
     }
-
 
     public Produto detalharProdutoPorId(String id) {
         return produtoGateway.detalharProdutoPorId(id)
-                .orElseThrow(() -> new IdNaoEncontradoException(String.format("Id não encontrado", id)));
-
+                .orElseThrow(() -> new IdNaoEncontradoException(String
+                        .format("Id não encontrado")));
     }
 
     @Override
     public void deletarProduto(String id) {
         Produto produto = detalharProdutoPorId(id);
-        if (produto.getAtivo() == true) {
+        if (produto.getAtivo()) {
             throw new ProdutoAtivoException
                     (String.format("Produto não pode ser excluido. Inative para realizar operação", produto.getId()));
-        } else if (produto.getAtivo() == false) {
-            produtoGateway.deletarProdutoPorId(id);
-
         }
-    }
+            produtoGateway.deletarProdutoPorId(id);
+        }
 
     @Override
     public Produto atualizarParcialmenteProduto(String id, Produto novoProduto) {
         Produto produtoAtual = detalharProdutoPorId(id);
 
-        if(StringUtils.isNotBlank(novoProduto.getNome())){
+        if (StringUtils.isNotBlank(novoProduto.getNome())) {
             Optional<Produto> produtoPresente = produtoGateway.findByNomeProduto(novoProduto.getNome());
-            if(produtoPresente.isPresent() && !StringUtils.equalsIgnoreCase(produtoAtual.getId(), id)){
+            if (produtoPresente.isPresent() && !StringUtils.equalsIgnoreCase(produtoPresente.get().getId(), id)) {
                 validarNomeDuplicado(novoProduto);
             }
             produtoAtual.setNome(novoProduto.getNome());
@@ -109,55 +109,39 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
         if (StringUtils.isNotBlank(novoProduto.getDescricao())) {
             produtoAtual.setDescricao(novoProduto.getDescricao());
         }
+
         if (StringUtils.isNotBlank(novoProduto.getMarca())) {
             produtoAtual.setMarca(novoProduto.getMarca());
         }
-        if (Objects.isNull(novoProduto.getPreco())){
-            novoProduto.setPreco(produtoAtual.getPreco());
-        }
-        if(Objects.nonNull(novoProduto.getPreco())){
+
+        if (Objects.nonNull(novoProduto.getPreco())) {
             validarPrecoZeradoOuNegativo(novoProduto);
             produtoAtual.setPreco(novoProduto.getPreco());
         }
-        if (Objects.isNull(novoProduto.getAtivo())){
-                novoProduto.setAtivo(produtoAtual.getAtivo());
+
+        if(!novoProduto.getDepartamentos().isEmpty()){
+            for (Departamento departamento : novoProduto.getDepartamentos()) {
+                Optional<Departamento> novoDepartamento = departamentoGateway
+                        .buscarDepartamentoPorId(departamento.getIdDepartamento ());
+                if(novoDepartamento.isPresent()){
+                produtoAtual.setDepartamentos(novoProduto.getDepartamentos());
+                }
             }
-        if(Objects.nonNull(novoProduto.getAtivo())){
-            if(!novoProduto.getAtivo()){
-                produtoAtual.setOfertado(false);
-                produtoAtual.setPorcentagemOferta(0);
-            }
-            produtoAtual.setAtivo(novoProduto.getAtivo());
-        }
-        if (Objects.isNull(novoProduto.getOfertado())){
-            novoProduto.setAtivo(produtoAtual.getOfertado());
         }
 
-        if (Objects.nonNull(novoProduto.getOfertado())) {
-            if (!novoProduto.getAtivo() && novoProduto.getOfertado()) {
-                throw new ProdutoAtivoException("Produto precisa estar ativo para ser ofertado");
-            }
-            produtoAtual.setOfertado(novoProduto.getOfertado());
+        validarDepartamento(novoProduto);
 
-            }
-        if (Objects.isNull(novoProduto.getPorcentagemOferta())){
-            novoProduto.setPorcentagemOferta(produtoAtual.getPorcentagemOferta());
-        }
-
-        if(Objects.nonNull(novoProduto.getPorcentagemOferta())){
-            if (novoProduto.getPorcentagemOferta() <= 0 ) {
-                throw new PorcentagemProdutoException("A porcentagem de desconto precisa ser maior do que 0");
-            }
-            produtoAtual.setPorcentagemOferta(novoProduto.getPorcentagemOferta());
-        }
         produtoAtual.setDataAtualizacao(getDataHora());
 
-            return produtoGateway.atualizarProduto(produtoAtual);
+        return produtoGateway.atualizarProduto(produtoAtual);
     }
 
+    private void validarDepartamento(Produto produto) {
+        produto.getDepartamentos().forEach(departamento ->
+                departamentoGateway.buscarDepartamentoPorId(departamento.getIdDepartamento())
+                        .orElseThrow(()-> new EntityNotExistException(
+                                String.format("Não existe cadastro de departamento com código %s", departamento.getIdDepartamento()))));
 
+    }
 
-}
-
-
-
+    }

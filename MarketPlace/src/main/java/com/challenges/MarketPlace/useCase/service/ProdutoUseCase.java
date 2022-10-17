@@ -13,9 +13,7 @@ public interface ProdutoUseCase {
 
     Produto detalharProdutoPorId(String id);
 
-
     void deletarProduto(String id);
-
 
     Produto atualizarParcialmenteProduto(String id, Produto produto);
 }

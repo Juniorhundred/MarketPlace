@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoEntryPointMapperResponse {
-    private ProdutoEntryPointMapperResponse(){}
 
     public static ProdutoModelResponse converterDomainParaEntryPoint(Produto produto){
 
@@ -23,6 +22,7 @@ public class ProdutoEntryPointMapperResponse {
                 .dataAtualizacao(produto.getDataAtualizacao())
                 .ofertado(produto.getOfertado())
                 .porcentagemOferta(produto.getPorcentagemOferta())
+                .departamentos(DepartamentoEntrypointMapperResponse.convertList(produto.getDepartamentos()))
                 .build();
     }
 

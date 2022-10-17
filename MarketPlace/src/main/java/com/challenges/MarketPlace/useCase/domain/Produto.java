@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -19,4 +21,5 @@ public class Produto {
     private Integer porcentagemOferta;
     private String dataCadastro;
     private String dataAtualizacao;
+    private List<Departamento> departamentos;
 }

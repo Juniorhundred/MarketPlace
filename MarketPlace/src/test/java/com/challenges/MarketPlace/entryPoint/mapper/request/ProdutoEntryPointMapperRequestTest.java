@@ -15,11 +15,17 @@ class ProdutoEntryPointMapperRequestTest {
         assertNotNull(produto);
         assertAll(
                 () -> assertEquals("Iphone12", produto.getNome()),
-                () -> assertEquals("16GB",produto.getDescricao()),
-                () -> assertEquals("Apple",produto.getMarca()),
-                () -> assertEquals(100.00,produto.getPreco())
+                () -> assertEquals("16GB", produto.getDescricao()),
+                () -> assertEquals("Apple", produto.getMarca()),
+                () -> assertEquals(100.00, produto.getPreco())
         );
+
     }
+    @Test
+    void converterEntryPointParaDomainUpdate(){
+
+    }
+
 
     private ProdutoModelRequest mockProduto() {
         return ProdutoModelRequest.builder()

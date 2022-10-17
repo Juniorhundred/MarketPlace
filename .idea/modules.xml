@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MarketPlace.iml" filepath="$PROJECT_DIR$/.idea/MarketPlace.iml" />
       <module fileurl="file://$PROJECT_DIR$/MarketPlace/challengemarketplace.iml" filepath="$PROJECT_DIR$/MarketPlace/challengemarketplace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MarketPlace/marketplace.iml" filepath="$PROJECT_DIR$/MarketPlace/marketplace.iml" />
     </modules>
   </component>
 </project>
