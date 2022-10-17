@@ -1,10 +1,8 @@
 package com.challenges.MarketPlace.useCase.service;
 
+import com.challenges.MarketPlace.entryPoint.validation.exception.CampoInvalidoOperacaoException;
 import com.challenges.MarketPlace.useCase.domain.Produto;
-import com.challenges.MarketPlace.useCase.exceptions.EntityException;
-import com.challenges.MarketPlace.useCase.exceptions.PorcentagemProdutoException;
-import com.challenges.MarketPlace.useCase.exceptions.ProdutoAtivoException;
-import com.challenges.MarketPlace.useCase.exceptions.ValidarPrecoException;
+import com.challenges.MarketPlace.useCase.exceptions.*;
 import com.challenges.MarketPlace.useCase.gateway.OfertaGateway;
 import com.challenges.MarketPlace.useCase.gateway.ProdutoGateway;
 import org.springframework.stereotype.Service;
@@ -12,9 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class OfertaUseCaseImpl implements OfertaUseCase {
@@ -27,12 +23,12 @@ public class OfertaUseCaseImpl implements OfertaUseCase {
         this.ofertaGateway = ofertaGateway;
     }
 
-    @Transactional
+
     @Override
     public void atualizarOferta(List<Produto> produtos) {
         for(Produto produto : produtos) {
-            Produto produtoAtual = detalharProdutoPorId(produto.getId());
-
+            try {
+                Produto produtoAtual = detalharProdutoPorId(produto.getId());
 
                 if (!produtoAtual.getAtivo()) {
                     throw new ProdutoAtivoException
@@ -40,21 +36,26 @@ public class OfertaUseCaseImpl implements OfertaUseCase {
                 }
                 produtoAtual.setOfertado(true);
 
-            if(Objects.isNull(produto.getPorcentagemOferta())) {
-                throw new PorcentagemProdutoException
-                        (String.format("A Porcentagem de Oferta não pode ser nulo"));
+                if(Objects.isNull(produto.getPorcentagemOferta())) {
+                    throw new PorcentagemProdutoException
+                            (String.format("A Porcentagem de Oferta não pode ser nulo"));
+                }
+
+                if (Objects.nonNull(produto.getPorcentagemOferta())) {
+                    validarPorcentagemZeradoOuNegativo(produto);
+                    produtoAtual.setPorcentagemOferta(produto.getPorcentagemOferta());
+                }
+
+                produtoAtual.setOfertado(true);
+
+                produtoAtual.setDataAtualizacao(getDataHora());
+                ofertaGateway.atualizarOferta(produtoAtual);
+
+            }catch (IdNaoEncontradoException exception) {
+                Map<String, List<String>> campos = new HashMap<>();
+                campos.put("id", List.of(exception.getMessage()));
+                throw new CampoInvalidoOperacaoException(campos);
             }
-
-            if (Objects.nonNull(produto.getPorcentagemOferta())) {
-                validarPorcentagemZeradoOuNegativo(produto);
-                produtoAtual.setPorcentagemOferta(produto.getPorcentagemOferta());
-            }
-
-            produtoAtual.setOfertado(true);
-
-
-            produtoAtual.setDataAtualizacao(getDataHora());
-            ofertaGateway.atualizarOferta(produtoAtual);
         }
     }
 
@@ -62,6 +63,8 @@ public class OfertaUseCaseImpl implements OfertaUseCase {
     public List<Produto> listarOfertas() {
         List<Produto> produtos = ofertaGateway.listarOfertas();
         if(produtos.isEmpty()) {
+
+            throw new ConteudoNaoEncontradoException("Não existem ofertas no momento.");
 
         }
         return ofertaGateway.listarOfertas();
@@ -85,13 +88,13 @@ public class OfertaUseCaseImpl implements OfertaUseCase {
     @Override
     public Produto detalharProdutoPorId(String idProduto) {
         return produtoGateway.detalharProdutoPorId(idProduto)
-                .orElseThrow(() -> new EntityException
+                .orElseThrow(() -> new EntityNotExistException
                         (String.format("Produto %s não consta como cadastrado", idProduto)));
     }
 
     private void validarPorcentagemZeradoOuNegativo(Produto produtoRequest) {
         if (produtoRequest.getPorcentagemOferta() <= 0 ) {
-            throw new ValidarPrecoException(String
+            throw new ValidarPorcentagemOfertaException(String
                     .format("A porcentagem da oferta não pode ser zero ou menor.", produtoRequest
                             .getPorcentagemOferta()));
         }

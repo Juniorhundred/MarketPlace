@@ -2,7 +2,7 @@ package com.challenges.MarketPlace.entryPoint.controller;
 
 import com.challenges.MarketPlace.entryPoint.mapper.request.ProdutoEntryPointMapperRequest;
 import com.challenges.MarketPlace.entryPoint.mapper.response.ProdutoEntryPointMapperResponse;
-import com.challenges.MarketPlace.entryPoint.model.request.ProdutoModelRequest;
+import com.challenges.MarketPlace.entryPoint.model.request.ProdutoRequestModel;
 import com.challenges.MarketPlace.entryPoint.model.request.ProdutoUptadeModelRequest;
 import com.challenges.MarketPlace.entryPoint.model.response.ProdutoResponseListFiltro;
 import com.challenges.MarketPlace.entryPoint.model.response.ProdutoModelResponse;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class ProdutoController {
 
 
     @PostMapping
-    public ResponseEntity<ProdutoModelResponse> criarProduto(@RequestBody ProdutoModelRequest produtoModelRequest) {
+    public ResponseEntity<ProdutoModelResponse> criarProduto(@Valid @RequestBody ProdutoRequestModel produtoModelRequest) {
 
         Produto produtoRequest = ProdutoEntryPointMapperRequest.converterEntryPointParaDomain(produtoModelRequest);
         Produto produtoResponse = produtoUseCase.criarProduto(produtoRequest);
@@ -45,7 +46,7 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProdutoModelResponse> detalharProdutoPorId(@PathVariable String id) {
+    public ResponseEntity<ProdutoModelResponse> detalharProdutoPorId( @PathVariable String id) {
         Produto produto = produtoUseCase.detalharProdutoPorId(id);
 
         ProdutoModelResponse produtoModelResponse = ProdutoEntryPointMapperResponse
@@ -55,14 +56,14 @@ public class ProdutoController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deletarProdutoPorId(@PathVariable String id) {
+    public ResponseEntity<?> deletarProdutoPorId(  @PathVariable String id) {
         produtoUseCase.deletarProduto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<ProdutoModelResponse> atualizarProduto(@PathVariable("id") String id,
-                                                                 @RequestBody ProdutoUptadeModelRequest produtoUptadeModelRequest) {
+                                                                 @Valid @RequestBody ProdutoUptadeModelRequest produtoUptadeModelRequest) {
         Produto produtoRequest = ProdutoEntryPointMapperRequest.converterEntryPointParaDomainUpdate(produtoUptadeModelRequest);
         Produto produtoResponse = produtoUseCase.atualizarParcialmenteProduto(id, produtoRequest);
 

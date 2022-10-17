@@ -1,10 +1,11 @@
 package com.challenges.MarketPlace.entryPoint.mapper.request;
 
-import com.challenges.MarketPlace.entryPoint.model.request.ProdutoModelRequest;
+import com.challenges.MarketPlace.entryPoint.model.request.ProdutoRequestModel;
 import com.challenges.MarketPlace.entryPoint.model.request.ProdutoUptadeModelRequest;
 import com.challenges.MarketPlace.useCase.domain.Departamento;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,7 @@ public class ProdutoEntryPointMapperRequest {
 
     private ProdutoEntryPointMapperRequest(){}
 
-    public static Produto converterEntryPointParaDomain (ProdutoModelRequest produtoModelRequest){
+    public static Produto converterEntryPointParaDomain (@Valid ProdutoRequestModel produtoModelRequest){
 
         return Produto.builder()
                 .nome(produtoModelRequest.getNome())

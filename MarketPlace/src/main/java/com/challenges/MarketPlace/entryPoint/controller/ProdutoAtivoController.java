@@ -2,12 +2,14 @@ package com.challenges.MarketPlace.entryPoint.controller;
 
 import com.challenges.MarketPlace.entryPoint.mapper.request.ProdutoAtivoEntryPointMapperRequest;
 import com.challenges.MarketPlace.entryPoint.model.request.ProdutoAtivoModelRequest;
+import com.challenges.MarketPlace.entryPoint.validation.exception.ValidacaoException;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 import com.challenges.MarketPlace.useCase.service.ProdutoAtivoUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,8 +24,9 @@ public class ProdutoAtivoController {
 
     @PutMapping
     public ResponseEntity<?> atualizarProdutoAtivo
-            (@RequestBody List<ProdutoAtivoModelRequest> produtoAtivoModelRequests) {
+            (@Valid @RequestBody List<ProdutoAtivoModelRequest> produtoAtivoModelRequests) {
 
+        ValidacaoException.validateAtivo(produtoAtivoModelRequests);
         List<Produto> produtoRequestDomain = ProdutoAtivoEntryPointMapperRequest.converterProdutosAtivos(produtoAtivoModelRequests);
 
         produtoAtivoUseCase.atualizarProdutoAtivo(produtoRequestDomain);
@@ -33,8 +36,9 @@ public class ProdutoAtivoController {
 
     @DeleteMapping
     public ResponseEntity<?> deletarProdutoAtivado
-            (@RequestBody List<ProdutoAtivoModelRequest> produtoAtivoModelRequests) {
+            (@Valid @RequestBody List<ProdutoAtivoModelRequest> produtoAtivoModelRequests) {
 
+        ValidacaoException.validateAtivo(produtoAtivoModelRequests);
         List<Produto> produtoRequestDomain = ProdutoAtivoEntryPointMapperRequest.converterProdutosInativos
                 (produtoAtivoModelRequests);
 

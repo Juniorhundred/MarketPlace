@@ -1,7 +1,7 @@
 package com.challenges.MarketPlace.useCase.service;
 
 import com.challenges.MarketPlace.useCase.domain.Produto;
-import com.challenges.MarketPlace.useCase.exceptions.IdNaoEncontradoException;
+import com.challenges.MarketPlace.useCase.exceptions.EntityNotExistException;
 import com.challenges.MarketPlace.useCase.gateway.ProdutoAtivoGateway;
 import com.challenges.MarketPlace.useCase.gateway.ProdutoGateway;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class ProdutoAtivoUseCaseImpl implements ProdutoAtivoUseCase {
 
     public Produto detalharProdutoPorId(String id) {
         return produtoGateway.detalharProdutoPorId(id)
-                .orElseThrow(() -> new IdNaoEncontradoException(String
+                .orElseThrow(() -> new EntityNotExistException(String
                         .format("Id não encontrado", id)));
     }
 

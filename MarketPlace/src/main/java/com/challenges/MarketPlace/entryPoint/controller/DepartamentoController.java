@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class DepartamentoController {
     private final DepartamentoUseCase departamentoUseCase;
 
     @PostMapping
-    public ResponseEntity<DepartamentoModelResponse> cadastrarDepartamento(@RequestBody DepartamentoModelRequest departamentoModelRequest) {
+    public ResponseEntity<DepartamentoModelResponse> cadastrarDepartamento(@Valid @RequestBody DepartamentoModelRequest departamentoModelRequest) {
 
         Departamento departamentoRequestDomain = DepartamentoEntrypointMapperRequest
                 .converterEntrypointParaDomain(departamentoModelRequest);
@@ -35,7 +36,7 @@ public class DepartamentoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DepartamentoModelResponse>> buscarDepartamentos(@RequestParam(value="nomeDepartamento", required=false) String nomeDepartamento) {
+    public ResponseEntity<List<DepartamentoModelResponse>> buscarDepartamentos( @RequestParam(value="nomeDepartamento", required=false) String nomeDepartamento) {
 
         List<Departamento> departamentosResponseDomain = departamentoUseCase.buscarTodosDepartamentos(nomeDepartamento);
 
@@ -51,7 +52,7 @@ public class DepartamentoController {
     }
 
     @DeleteMapping(value = "/{idDepartamento}")
-    public ResponseEntity<?> removerDepartamentoPorId(@PathVariable Integer idDepartamento) {
+    public ResponseEntity<?> removerDepartamentoPorId( @PathVariable Integer idDepartamento) {
         departamentoUseCase.excluirDepartamento(idDepartamento);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

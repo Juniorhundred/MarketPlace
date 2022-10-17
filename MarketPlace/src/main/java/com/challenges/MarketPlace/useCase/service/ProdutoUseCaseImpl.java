@@ -56,7 +56,7 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
 
     private void validarPrecoZeradoOuNegativo(Produto produto) {
         if (produto.getPreco() <= 0) {
-            throw new ValidarPrecoException(String.format("O preço '%s' não pode ser zero ou negativo ", produto.getPreco()));
+            throw new ValidarPrecoException(String.format("O preço do produto não pode ser zero ou negativo "));
         }
     }
 
@@ -69,13 +69,19 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
 
     @Override
     public List<Produto> buscarListaDeProdutos() {
-        return produtoGateway.listaProdutos();
+        List<Produto> produtos = produtoGateway.listaProdutos();
+
+        if (produtos.isEmpty()) {
+            throw new ConteudoNaoEncontradoException("Não existe produtos cadastrados");
+        }
+
+        return produtos;
     }
 
     public Produto detalharProdutoPorId(String id) {
         return produtoGateway.detalharProdutoPorId(id)
                 .orElseThrow(() -> new IdNaoEncontradoException(String
-                        .format("Id não encontrado", id)));
+                        .format("Id não encontrado")));
     }
 
     @Override
@@ -133,7 +139,7 @@ public class ProdutoUseCaseImpl implements ProdutoUseCase {
     private void validarDepartamento(Produto produto) {
         produto.getDepartamentos().forEach(departamento ->
                 departamentoGateway.buscarDepartamentoPorId(departamento.getIdDepartamento())
-                        .orElseThrow(()-> new DepartamentoInexistenteException(
+                        .orElseThrow(()-> new EntityNotExistException(
                                 String.format("Não existe cadastro de departamento com código %s", departamento.getIdDepartamento()))));
 
     }

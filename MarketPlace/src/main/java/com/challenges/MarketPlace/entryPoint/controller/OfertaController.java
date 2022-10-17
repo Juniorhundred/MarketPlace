@@ -5,12 +5,14 @@ import com.challenges.MarketPlace.entryPoint.mapper.response.OfertaEntrypointMap
 import com.challenges.MarketPlace.entryPoint.model.request.OfertaProdutoRemovidaModelRequest;
 import com.challenges.MarketPlace.entryPoint.model.request.ProdutoOfertadoModelRequest;
 import com.challenges.MarketPlace.entryPoint.model.response.ProdutoOfertadoModelResponse;
+import com.challenges.MarketPlace.entryPoint.validation.exception.ValidacaoException;
 import com.challenges.MarketPlace.useCase.domain.Produto;
 import com.challenges.MarketPlace.useCase.service.OfertaUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,13 +27,14 @@ public class OfertaController {
 
     @PutMapping
     public ResponseEntity<?> atualizarOfertaProduto
-            (@RequestBody List<ProdutoOfertadoModelRequest> produtoOfertadoModelRequests) {
+            (@Valid @RequestBody  List<ProdutoOfertadoModelRequest> produtoOfertadoModelRequests) {
 
+        ValidacaoException.validate(produtoOfertadoModelRequests);
         List<Produto> produtoRequestDomain = OfertaEntrypointMapperRequest.converterProdutosOfertados(produtoOfertadoModelRequests);
 
         ofertaUseCase.atualizarOferta(produtoRequestDomain);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
@@ -52,9 +55,9 @@ public class OfertaController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deletarOferta
-            (@RequestBody List<OfertaProdutoRemovidaModelRequest> ofertaProdutoRemovidaModelRequests) {
-
+    public ResponseEntity<Void> deletarOferta
+            (@Valid @RequestBody List<OfertaProdutoRemovidaModelRequest> ofertaProdutoRemovidaModelRequests) {
+        ValidacaoException.validateOfertadoFalse(ofertaProdutoRemovidaModelRequests);
         List<Produto> produtoRequestDomain = OfertaEntrypointMapperRequest
                 .converterRemoverOfertas(ofertaProdutoRemovidaModelRequests);
 
